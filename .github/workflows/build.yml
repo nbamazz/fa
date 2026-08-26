@@ -15,9 +15,10 @@ jobs:
           distribution: temurin
           java-version: '17'
           cache: maven
+          cache-dependency-path: CratePlugin/pom.xml
       - run: mvn -B package
+        working-directory: CratePlugin
       - uses: actions/upload-artifact@v4
         with:
           name: CratePlugin-jar
-          path: target/CratePlugin.jar
-          
+          path: CratePlugin/target/CratePlugin.jar
