@@ -1,0 +1,21 @@
+name: CratePlugin
+version: '1.0.0'
+main: com.craftserver.crateplugin.CratePlugin
+api-version: '1.20'
+folia-supported: false
+author: YourServer
+description: Crate plugin with keys, spin animation, custom block crates and a Prime Case 3x3 pickaxe.
+
+commands:
+  crate:
+    description: Main crate admin/user command
+    usage: /crate <create|setblock|addreward|removecrate|list|open|key|keyall|reload>
+    permission: crate.use
+
+permissions:
+  crate.use:
+    description: Allows opening crates with a key
+    default: true
+  crate.admin:
+    description: Allows creating/editing crates and giving keys
+    default: op
