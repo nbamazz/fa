@@ -21,11 +21,23 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
+      - name: Locate pom.xml
+        id: locate
+        run: |
+          POM_PATH=$(find . -maxdepth 4 -name pom.xml | head -n 1)
+          if [ -z "$POM_PATH" ]; then
+            echo "Could not find pom.xml anywhere in the repo!"
+            exit 1
+          fi
+          echo "Found pom.xml at: $POM_PATH"
+          echo "pom_path=$POM_PATH" >> "$GITHUB_OUTPUT"
+          echo "pom_dir=$(dirname "$POM_PATH")" >> "$GITHUB_OUTPUT"
+
       - name: Build with Maven
-        run: mvn -B package
+        run: mvn -B -f "${{ steps.locate.outputs.pom_path }}" package
 
       - name: Upload built jar
         uses: actions/upload-artifact@v4
         with:
           name: prime-smp-settings-jar
-          path: target/prime-smp-settings.jar
+          path: ${{ steps.locate.outputs.pom_dir }}/target/prime-smp-settings.jar
