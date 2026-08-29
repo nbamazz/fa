@@ -1,24 +1,31 @@
-name: Build plugin jar
+name: Build Plugin
 
 on:
   push:
-    branches: [ main, master ]
-  workflow_dispatch: {}
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
         with:
-          distribution: temurin
           java-version: '17'
+          distribution: 'temurin'
           cache: maven
-          cache-dependency-path: CratePlugin/pom.xml
-      - run: mvn -B package
-        working-directory: CratePlugin
-      - uses: actions/upload-artifact@v4
+
+      - name: Build with Maven
+        run: mvn -B package
+
+      - name: Upload built jar
+        uses: actions/upload-artifact@v4
         with:
-          name: CratePlugin-jar
-          path: CratePlugin/target/CratePlugin.jar
+          name: prime-smp-settings-jar
+          path: target/prime-smp-settings.jar
